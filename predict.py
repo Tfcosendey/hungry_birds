@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-model=tf.saved_model.load(
+reloaded_model=tf.saved_model.load(
     "yamnet_bird_1", tags=None, options=None
 )
 
