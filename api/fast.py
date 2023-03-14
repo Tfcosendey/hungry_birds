@@ -19,9 +19,9 @@ import tensorflow_io as tfio
 
 app = FastAPI()
 
+yamnet_model = hub.load('https://tfhub.dev/google/yamnet/1')
 
 # preprocessing
-
 def load_wav_16k_mono(filename):
     """ Load a WAV file, convert it to a float tensor, resample to 16 kHz single-channel audio. """
     file_contents = tf.io.read_file(filename)
@@ -50,7 +50,6 @@ def extract_embedding(wav_data, label):
 def predict(filename):
   wav = load_wav_16k_mono(filename)
   # yamnet model
-  yamnet_model = hub.load('https://tfhub.dev/google/yamnet/1')
   scores, embeddings, spectrogram = yamnet_model(wav)
   scores = scores[:,106]
   scores = tf.reshape(scores, [-1, 1])
