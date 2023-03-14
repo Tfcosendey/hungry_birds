@@ -12,9 +12,21 @@ app = FastAPI()
     # Process the audio file
     # ...
     # Return the predicted class label
+    
+    import tensorflow as tf
+
+    model=tf.saved_model.load(
+        "yamnet_bird_1", tags=None, options=None
+    )
+
+    #preprocess
+
+    #file here
+    model.predict()
     #return {"class": "music"}
 
 
 @app.get("/")
 def index():
+    
     return {"status": "ok"}
