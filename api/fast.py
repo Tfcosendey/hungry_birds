@@ -31,7 +31,7 @@ app = FastAPI()
 
 yamnet_model = hub.load('https://tfhub.dev/google/yamnet/1')
 print(os.getcwd())
-my_model = tf.keras.models.load_model("yamnet_full")
+my_model = tf.keras.models.load_model("yamnet_full", compile=False)
 # my_model=tf.saved_model.load(
 #            "/home/tcosendey/code/Tfcosendey/hungry_birds/yamnet_full")
 assert my_model is not None
@@ -39,15 +39,6 @@ assert my_model is not None
 
 
 filename = "/home/tcosendey/code/Tfcosendey/hungry_birds/Drymophila ochropyga.wav"
-
-@app.post("/files/")
-async def create_file(file: bytes = File()):
-    return {"file_size": len(file)}
-
-
-@app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile):
-    return {"filename": file.filename}
 
 # preprocessing
 def load_wav_16k_mono(filename):
