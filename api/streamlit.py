@@ -24,3 +24,7 @@ if upload_file is not None:
 params = upload_file
 
 response = requests.get(url, params=params)
+
+prediction = response.json()
+
+st.header(f'It is very likely that the bird specy is:{prediction}')
