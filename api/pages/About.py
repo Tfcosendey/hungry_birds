@@ -83,11 +83,22 @@ filtered_df.reset_index(drop=True,inplace=True)
 
 # Table
 st.markdown("""## Data exploration""")
+st.text("1. Number of audio recordings = 16.322")
+st.text("2. Number of different species = 121 ")
 
-summary_table = filtered_df.groupby('gen_sp').count().sort_values(by='id', ascending = False)[['id']]
-total_recordings = summary_table['id'].sum()
-summary_table.loc['Total'] = total_recordings
-st.table(summary_table)
+# table per year
+fig, ax = plt.subplots(figsize=(16, 6))
+
+filtered_df['date'] = pd.to_datetime(filtered_df['date'], format='%Y-%m-%d', errors='coerce')
+filtered_df['year'] = filtered_df['date'].dt.year
+year_counts = filtered_df['year'].value_counts()
+ax.bar(year_counts.index, year_counts.values, color = "darkgreen")
+
+ax.set_xlabel('Year')
+ax.set_ylabel('Number of Recordings')
+ax.set_title('Number of Recordings per Year', fontsize=20, fontweight='bold')
+
+st.pyplot(fig)
 
 
 # Map
@@ -99,17 +110,3 @@ def display_filtered_df_on_map(filtered_df):
     st.plotly_chart(fig)
 
 display_filtered_df_on_map(filtered_df)
-
-# table per year
-fig, ax = plt.subplots(figsize=(16, 6))
-
-filtered_df['date'] = pd.to_datetime(filtered_df['date'], format='%Y-%m-%d', errors='coerce')
-filtered_df['year'] = filtered_df['date'].dt.year
-year_counts = filtered_df['year'].value_counts()
-ax.bar(year_counts.index, year_counts.values, color = "darkgreen")
-
-ax.xlabel('Year')
-ax.ylabel('Number of Recordings')
-ax.title('Number of Recordings per Year', fontsize=20, fontweight='bold')
-
-st.pyplot(fig)
