@@ -19,13 +19,12 @@ upload_file = st.file_uploader("Choose an audio file", type=[".wav"], accept_mul
 if upload_file is not None:
     audio_bytes = upload_file.read()
     st.audio(audio_bytes,format="audio/wav")
-    st.form_submit_button('Make prediction')
+    if st.button("Make prediction"):
+        # Send the file to the API for prediction
+        files = {"file": upload_file}
+        response = requests.post(url, files=files)
 
+        # Get the prediction from the response
+        prediction = response.json()["prediction"]
 
-params = upload_file
-
-response = requests.post(url, params=params)
-
-prediction = response.json()
-
-st.header(f'It is very likely that the bird specy is:{prediction}')
+        st.success(f"It is very likely that the bird species is: {prediction}")
