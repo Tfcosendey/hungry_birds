@@ -77,16 +77,12 @@ if upload_file is not None:
 
         #the model
 
-        filename = "/home/tcosendey/code/Tfcosendey/hungry_birds/Drymophila ochropyga.wav"
+        # filename = "/home/tcosendey/code/Tfcosendey/hungry_birds/Drymophila ochropyga.wav"
 
-        print(audio_bytes)
-        print(upload_file)
-
-        def predict(file: UploadFile):
-            with aiofiles.open(file.filename, 'wb') as out_file:
-                content = file.read()  # async read
-                out_file.write(content)  # async write
-            wav = load_wav_16k_mono(file.filename)
+        def predict(file):
+            with open('temp_wav_file.wav', 'wb') as wav_file:
+                wav_file.write(file)
+            wav = load_wav_16k_mono('temp_wav_file.wav')
             # yamnet model
             scores, embeddings, spectrogram = yamnet_model(wav)
             scores = scores[:,106]
@@ -96,11 +92,12 @@ if upload_file is not None:
             row_sum = tf.reduce_sum(final_scores)
             final_scores = tf.divide(final_scores, row_sum)
             final_score = pd.DataFrame(final_scores, columns = ['Probability'])
-            with open('yamnet_full/label_encoder.pkl', 'rb') as f:
-                le = pickle.load(f)
+            with open('yamnet_full/label_encoder.pkl', 'rb') as model_file:
+                le = pickle.load(model_file)
             final_score.index = le.inverse_transform(final_score.index)
             final_score = final_score.sort_values(by = 'Probability', ascending = False).applymap(lambda x: "{:.2%}".format(x))
             print(final_score.head(10).index)
-            os.remove(file.filename)
+            os.remove('temp_wav_file.wav')
             return final_score.head(10)
-    st.table(predict(upload_file))
+
+        st.table(predict(audio_bytes))
