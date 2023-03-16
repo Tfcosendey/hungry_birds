@@ -73,7 +73,11 @@ filtered_df = filtered_df[filtered_df['gen_sp'] != 'Mystery mystery']
 # Processing the index
 filtered_df.reset_index(drop=True,inplace=True)
 
-fig = px.scatter_mapbox(filtered_df, lat='lat', lon='lng', zoom=4, height=800, color='gen_sp')
-fig.update_layout(mapbox_style='open-street-map')
-fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-fig.show()
+def display_filtered_df_on_map(filtered_df):
+    fig = px.scatter_mapbox(filtered_df, lat='lat', lon='lng', zoom=4, height=800, color='gen_sp')
+    fig.update_layout(mapbox_style='open-street-map')
+    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    st.plotly_chart(fig)
+
+# example usage:
+display_filtered_df_on_map(filtered_df)
