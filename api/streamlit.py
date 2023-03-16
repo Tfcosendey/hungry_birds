@@ -12,9 +12,7 @@ url_image = "/Users/rodolpheterlinden/Desktop/Rodolphe/Projects/Wagon/hb.jpg"
 
 st.set_page_config(
     page_title="Hungry Birds",
-    page_icon="🦤",
-    layout="wide",
-    initial_sidebar_state="expanded", background_color="#f5f5f5", foreground_color="black")
+    page_icon="🦤")
 
 st.markdown("""# Hungry birds Tool
 ## Which bird specy is singing in your garden?""")
