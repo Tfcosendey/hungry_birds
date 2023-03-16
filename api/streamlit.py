@@ -5,6 +5,13 @@ import numpy as np
 import pandas as pd
 import requests
 
+#layout
+primaryColor="#F63366"
+backgroundColor="#FFFFFF"
+secondaryBackgroundColor="#F0F2F6"
+textColor="#262730"
+font="sans serif"
+
 url = "http://127.0.0.1:8000/"
 url_image = "/Users/rodolpheterlinden/Desktop/Rodolphe/Projects/Wagon/hb.jpg"
 
