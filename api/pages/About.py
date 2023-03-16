@@ -26,6 +26,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded")
 
+# data processing
 def get_data():
     birds_df = pd.DataFrame()
     for page in range(130):
@@ -41,3 +42,38 @@ def save_csv(df,name):
 
 birds_df = get_data()
 birds_df.shape
+
+# Processing the latitudes and longitudes
+birds_df['lat'] = pd.to_numeric(birds_df['lat'])
+birds_df['lng'] = pd.to_numeric(birds_df['lng'])
+
+# Cleaning null and "na" values
+birds_df = birds_df[(birds_df['lat'] != 0) & (birds_df['lng'] != 0)]
+birds_df = birds_df.dropna()
+
+# Focus on a radius of 500km around Rio de Janeiro (Brazil)
+point = (-22.91216,-43.17501)
+distance_km = 500
+
+rio_df = birds_df[birds_df.apply(lambda row: distance(point, (row['lat'], row['lng'])).km <= distance_km, axis=1)]
+
+# Creating a column merging generic and specific name of the birds
+rio_df['gen_sp'] = rio_df['gen'] + ' ' + rio_df['sp']
+birds_df['gen_sp'] = birds_df['gen'] + ' ' + birds_df['sp']
+
+# Taking all those species observed <500km from Rio and keeping those where we have > 100 recordings
+rio_sp = rio_df['gen_sp'].unique()
+birds_df_filt = birds_df[birds_df['gen_sp'].isin(rio_sp)]
+counts = birds_df_filt['gen_sp'].value_counts()
+filtered_df = birds_df_filt[birds_df_filt['gen_sp'].isin(counts[counts > 100].index)]
+
+# Removing unknown birds
+filtered_df = filtered_df[filtered_df['gen_sp'] != 'Mystery mystery']
+
+# Processing the index
+filtered_df.reset_index(drop=True,inplace=True)
+
+fig = px.scatter_mapbox(filtered_df, lat='lat', lon='lng', zoom=4, height=800, color='gen_sp')
+fig.update_layout(mapbox_style='open-street-map')
+fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+fig.show()
