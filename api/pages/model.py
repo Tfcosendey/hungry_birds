@@ -80,25 +80,21 @@ def extract_embedding(wav_data, label):
 
 filename = "/home/tcosendey/code/Tfcosendey/hungry_birds/Drymophila ochropyga.wav"
 
-async def predict(file: upload_file):
-  async with aiofiles.open(file.filename, 'wb') as out_file:
-      content = await file.read()  # async read
-      await out_file.write(content)  # async write
-  wav = load_wav_16k_mono(file.filename)
-  # yamnet model
-  scores, embeddings, spectrogram = yamnet_model(wav)
-  scores = scores[:,106]
-  scores = tf.reshape(scores, [-1, 1])
-  final_scores = scores * my_model(embeddings)
-  final_scores = tf.reduce_sum(final_scores, axis=0)
-  row_sum = tf.reduce_sum(final_scores)
-  final_scores = tf.divide(final_scores, row_sum)
-  final_score = pd.DataFrame(final_scores, columns = ['Probability'])
-  with open('yamnet_full/label_encoder.pkl', 'rb') as f:
-    le = pickle.load(f)
-  final_score.index = le.inverse_transform(final_score.index)
-  final_score = final_score.sort_values(by = 'Probability', ascending = False).applymap(lambda x: "{:.2%}".format(x))
-  print(final_score.head(10).index)
-  os.remove(file.filename)
-#  return final_score.head(10).index
-  return {'result': final_score.head(10)}
+def predict(upload_file):
+    wav = load_wav_16k_mono(upload_file)
+    # yamnet model
+    scores, embeddings, spectrogram = yamnet_model(wav)
+    scores = scores[:,106]
+    scores = tf.reshape(scores, [-1, 1])
+    final_scores = scores * my_model(embeddings)
+    final_scores = tf.reduce_sum(final_scores, axis=0)
+    row_sum = tf.reduce_sum(final_scores)
+    final_scores = tf.divide(final_scores, row_sum)
+    final_score = pd.DataFrame(final_scores, columns = ['Probability'])
+    with open('yamnet_full/label_encoder.pkl', 'rb') as f:
+        le = pickle.load(f)
+    final_score.index = le.inverse_transform(final_score.index)
+    final_score = final_score.sort_values(by = 'Probability', ascending = False).applymap(lambda x: "{:.2%}".format(x))
+    print(final_score.head(10).index)
+    os.remove(upload_file)
+    return final_score.head(10).index
