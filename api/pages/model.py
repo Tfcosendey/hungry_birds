@@ -79,10 +79,10 @@ if upload_file is not None:
 
         filename = "/home/tcosendey/code/Tfcosendey/hungry_birds/Drymophila ochropyga.wav"
 
-        async def predict(file: UploadFile):
-            async with aiofiles.open(file.filename, 'wb') as out_file:
-                content = await file.read()  # async read
-                await out_file.write(content)  # async write
+        def predict(file: UploadFile):
+            with aiofiles.open(file.filename, 'wb') as out_file:
+                content = file.read()  # async read
+                out_file.write(content)  # async write
             wav = load_wav_16k_mono(file.filename)
             # yamnet model
             scores, embeddings, spectrogram = yamnet_model(wav)
