@@ -96,3 +96,4 @@ if upload_file is not None:
             print(final_score.head(10).index)
             os.remove(upload_file)
             return final_score.head(10).index
+        predict(upload_file)
