@@ -5,8 +5,8 @@ import numpy as np
 import pandas as pd
 import requests
 
-
-st.set_page_config(background_color="#f5f5f5", foreground_color="black")
+st.set_page_config(page_title=None, page_icon=":guardsman:", layout="wide",
+                   initial_sidebar_state="expanded", background_color="#f5f5f5", foreground_color="black")
 
 url = "http://127.0.0.1:8000/"
 url_image = "/Users/rodolpheterlinden/Desktop/Rodolphe/Projects/Wagon/hb.jpg"
