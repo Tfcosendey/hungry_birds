@@ -79,8 +79,11 @@ if upload_file is not None:
 
         filename = "/home/tcosendey/code/Tfcosendey/hungry_birds/Drymophila ochropyga.wav"
 
-        def predict(upload_file):
-            wav = load_wav_16k_mono(upload_file)
+        async def predict(file: UploadFile):
+            async with aiofiles.open(file.filename, 'wb') as out_file:
+                content = await file.read()  # async read
+                await out_file.write(content)  # async write
+            wav = load_wav_16k_mono(file.filename)
             # yamnet model
             scores, embeddings, spectrogram = yamnet_model(wav)
             scores = scores[:,106]
@@ -95,6 +98,7 @@ if upload_file is not None:
             final_score.index = le.inverse_transform(final_score.index)
             final_score = final_score.sort_values(by = 'Probability', ascending = False).applymap(lambda x: "{:.2%}".format(x))
             print(final_score.head(10).index)
-            os.remove(upload_file)
-            return final_score.head(10).index
+            os.remove(file.filename)
+            #  return final_score.head(10).index
+            return {'result': final_score.head(10)}
         predict(upload_file)
