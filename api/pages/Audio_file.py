@@ -19,6 +19,11 @@ from IPython.display import Audio
 from pydub import AudioSegment
 from scipy.io import wavfile
 from tempfile import mktemp
+import os
+
+import numpy as np
+import pandas as pd
+import requests
 
 # Layout
 st.set_page_config(
