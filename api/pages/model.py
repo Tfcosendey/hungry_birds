@@ -80,6 +80,7 @@ if upload_file is not None:
         filename = "/home/tcosendey/code/Tfcosendey/hungry_birds/Drymophila ochropyga.wav"
 
         print(audio_bytes)
+        print(upload_file)
 
         def predict(file: UploadFile):
             with aiofiles.open(file.filename, 'wb') as out_file:
