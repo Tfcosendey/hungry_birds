@@ -20,11 +20,17 @@ from pydub import AudioSegment
 from scipy.io import wavfile
 from tempfile import mktemp
 
+# Layout
 st.set_page_config(
     page_title="About",
     page_icon="🦤",
     layout="wide",
     initial_sidebar_state="expanded")
+
+st.markdown("""# Hungry Birds Project""")
+
+#####
+#####
 
 # data processing
 def get_data():
@@ -41,7 +47,6 @@ def save_csv(df,name):
     df.to_csv(path, index = False)
 
 birds_df = get_data()
-birds_df.shape
 
 # Processing the latitudes and longitudes
 birds_df['lat'] = pd.to_numeric(birds_df['lat'])
@@ -73,11 +78,38 @@ filtered_df = filtered_df[filtered_df['gen_sp'] != 'Mystery mystery']
 # Processing the index
 filtered_df.reset_index(drop=True,inplace=True)
 
+############
+############
+
+# Table
+st.markdown("""## Data exploration""")
+
+summary_table = filtered_df.groupby('gen_sp').count().sort_values(by='id', ascending = False)[['id']]
+total_recordings = summary_table['id'].sum()
+summary_table.loc['Total'] = total_recordings
+st.table(summary_table)
+
+
+# Map
+st.markdown("""## Mapping our data""")
 def display_filtered_df_on_map(filtered_df):
     fig = px.scatter_mapbox(filtered_df, lat='lat', lon='lng', zoom=4, height=800, color='gen_sp')
     fig.update_layout(mapbox_style='open-street-map')
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     st.plotly_chart(fig)
 
-# example usage:
 display_filtered_df_on_map(filtered_df)
+
+# table per year
+fig, ax = plt.subplots(figsize=(16, 6))
+
+filtered_df['date'] = pd.to_datetime(filtered_df['date'], format='%Y-%m-%d', errors='coerce')
+filtered_df['year'] = filtered_df['date'].dt.year
+year_counts = filtered_df['year'].value_counts()
+ax.bar(year_counts.index, year_counts.values, color = "darkgreen")
+
+ax.xlabel('Year')
+ax.ylabel('Number of Recordings')
+ax.title('Number of Recordings per Year', fontsize=20, fontweight='bold')
+
+st.pyplot(fig)
