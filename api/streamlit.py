@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import requests
 
-url = "http://localhost:8000/"
+url = "http://127.0.0.1:8000/"
 
 st.set_page_config(
     page_title="Hungry Birds",
@@ -21,9 +21,10 @@ if upload_file is not None:
     st.audio(audio_bytes,format="audio/wav")
     st.form_submit_button('Make prediction')
 
+
 params = upload_file
 
-response = requests.get(url, params=params)
+response = requests.post(url, params=params)
 
 prediction = response.json()
 
