@@ -99,5 +99,5 @@ if upload_file is not None:
             final_score = final_score.sort_values(by = 'Probability', ascending = False).applymap(lambda x: "{:.2%}".format(x))
             print(final_score.head(10).index)
             os.remove(file.filename)
-            return final_score.head(10).index
-    st.text(predict(upload_file))
+            return final_score.head(10)
+    st.table(predict(upload_file))
