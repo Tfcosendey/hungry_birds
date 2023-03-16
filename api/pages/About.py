@@ -81,10 +81,11 @@ filtered_df.reset_index(drop=True,inplace=True)
 ############
 ############
 
-# Table
+# Key figures
 st.markdown("""## Data exploration""")
-st.text("1. Number of audio recordings = 16.322")
-st.text("2. Number of different species = 121 ")
+st.text("**1. Number of audio recordings** = 16.322")
+st.text("**2. Number of different species** = 121 ")
+st.text("**3. Number of different features** = 39 (ex: rating, length, autor, location, type of sound,...) ")
 
 # table per year
 fig, ax = plt.subplots(figsize=(16, 6))
@@ -98,6 +99,24 @@ ax.set_xlabel('Year')
 ax.set_ylabel('Number of Recordings')
 ax.set_title('Number of Recordings per Year', fontsize=20, fontweight='bold')
 
+st.pyplot(fig)
+
+# table with rates
+
+fig, ax = plt.subplots(figsize=(16, 6))
+
+
+ratings = filtered_df['q'].values.tolist()
+occurrences = [ratings.count('A'), ratings.count('B'), ratings.count('C'), ratings.count('D'), ratings.count('E'),ratings.count('no score')]
+colors = ['darkgreen', 'forestgreen', 'gold', 'orange', 'red', 'gray']
+
+plt.bar(['A', 'B', 'C', 'D','E','no score'], occurrences, color=colors)
+plt.grid(axis='y', alpha=0.1)
+plt.title('Rating Occurrences', fontsize=20, fontweight='bold')
+plt.xlabel('Rating')
+plt.ylabel('Occurrences')
+
+# Display plot in Streamlit
 st.pyplot(fig)
 
 
