@@ -100,4 +100,4 @@ if upload_file is not None:
             print(final_score.head(10).index)
             os.remove(file.filename)
             return final_score.head(10).index
-    predict(upload_file)
+    st.text(predict(upload_file))
