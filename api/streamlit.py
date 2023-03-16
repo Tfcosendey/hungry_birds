@@ -8,8 +8,6 @@ import requests
 url = "http://127.0.0.1:8000/"
 url_image = "/Users/rodolpheterlinden/Desktop/Rodolphe/Projects/Wagon/hb.jpg"
 
-st.sidebar.image(url_image, width=100)
-
 
 st.set_page_config(
     page_title="Hungry Birds",
