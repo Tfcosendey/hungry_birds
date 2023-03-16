@@ -6,6 +6,10 @@ import pandas as pd
 import requests
 
 url = "http://127.0.0.1:8000/"
+url_image = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.justdial.com%2FVadodara%2FHungry-Birds-Restaurant-Opposite-Sterling-Hospital-Opposite-Indraprashtha-Complex-Beside-Inox-Wadi-Wadi-Opposite-Indrapr-Ellora-Park%2F0265PX265-X265-150107161932-H4Q9_BZDET&psig=AOvVaw0kdzLf44DDx47NN_uXfm1_&ust=1679061558108000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCLiU-PjN4P0CFQAAAAAdAAAAABAD"
+
+st.sidebar.image(url_image, width=100)
+
 
 st.set_page_config(
     page_title="Hungry Birds",
