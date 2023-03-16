@@ -100,4 +100,4 @@ if upload_file is not None:
             print(final_score.head(10).index)
             os.remove(file)
             return final_score.head(10)
-    st.table(predict(audio_bytes))
+    st.table(predict(upload_file))
