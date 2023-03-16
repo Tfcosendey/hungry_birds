@@ -28,6 +28,7 @@ import librosa
 import pydub
 import soundfile as sf
 import aiofiles
+import numba
 
 import numpy as np
 import pandas as pd
