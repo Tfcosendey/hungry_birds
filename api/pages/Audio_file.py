@@ -68,6 +68,7 @@ if audio_path is not None:
         audiogram(audio_bytes)
 #spectogram
 if audio_path is not None:
+
     if st.button("Plot a spectrogram"):
         audio_bytes_ = audio_path.read()
         def plot_spectrogram(audio_data):
@@ -89,6 +90,26 @@ if audio_path is not None:
 
 # mel-spectogram
 
+if audio_path is not None:
+
+    if st.button("Plot a Mel-spectrogram"):
+        audio_bytes_2 = audio_path.read()
+        def plot_meL_spectrogram(audio_data):
+            with open('temp_wav_file.wav', 'wb') as wav_file_2:
+                wav_file_2.write(audio_data)
+            wav_file_2.close()
+            y_2, sr_2 = librosa.load('temp_wav_file.wav')
+
+            S_2 = librosa.feature.melspectrogram(y=y_2, sr=sr_2,n_mels=128, fmax=8000)
+            S_db_2 = librosa.power_to_db(S_2, ref=np.max)
+            fig_2, ax_2 = plt.subplots(figsize=(14, 5))
+
+            img = librosa.display.specshow(S_db_2, x_axis='time', y_axis='mel', sr=sr_2, ax=ax_2)
+            fig_2.colorbar(img, ax=ax_2, format='%+2.0f dB')
+            ax_2.set_title('Spectrogram')
+            st.pyplot(fig_2)
+
+        plot_meL_spectrogram(audio_bytes_2)
 
 # different
 if audio_path is not None:
