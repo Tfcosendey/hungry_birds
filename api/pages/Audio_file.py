@@ -43,14 +43,17 @@ st.markdown("""# Hungry Birds Project
 # Upload file
 audio_path = st.file_uploader("Choose an audio file", type=[".wav"], accept_multiple_files=False)
 
+
 #audiogram
 if audio_path is not None:
-    audio_bytes = audio_path.read()
-    st.audio(audio_bytes, format="audio/wav")
+
     if st.button("Plot an audiogram"):
+        audio_bytes = audio_path.read()
+        st.audio(audio_bytes, format="audio/wav")
         def audiogram(audio_data):
             with open('temp_wav_file.wav', 'wb') as wav_file:
                 wav_file.write(audio_data)
+            wav_file.close()
             y, sr = librosa.load('temp_wav_file.wav')
 
             time = librosa.times_like(y)
@@ -63,28 +66,26 @@ if audio_path is not None:
             st.pyplot(fig)
 
         audiogram(audio_bytes)
-
-
 #spectogram
 if audio_path is not None:
-    audio_bytes = audio_path.read()
     if st.button("Plot a spectrogram"):
+        audio_bytes_ = audio_path.read()
         def plot_spectrogram(audio_data):
-            with open('temp_wav_file.wav', 'wb') as wav_file:
-                wav_file.write(audio_data)
-            y, sr = librosa.load('temp_wav_file.wav')
+            with open('temp_wav_file.wav', 'wb') as wav_file_:
+                wav_file_.write(audio_data)
+            wav_file_.close()
+            y_, sr_ = librosa.load('temp_wav_file.wav')
 
-            S = librosa.stft(y)
+            S = librosa.stft(y_)
             S_db = librosa.amplitude_to_db(abs(S))
-            fig, ax = plt.subplots(figsize=(14, 5))
+            fig_, ax_ = plt.subplots(figsize=(14, 5))
 
-            img = librosa.display.specshow(S_db, x_axis='time', y_axis='mel', sr=sr, ax=ax)
-            fig.colorbar(img, ax=ax, format='%+2.0f dB')
-            ax.set_title('Spectrogram')
-            st.pyplot(fig)
+            img = librosa.display.specshow(S_db, x_axis='time', y_axis='mel', sr=sr_, ax=ax_)
+            fig_.colorbar(img, ax=ax_, format='%+2.0f dB')
+            ax_.set_title('Spectrogram')
+            st.pyplot(fig_)
 
-        plot_spectrogram(audio_bytes)
-
+        plot_spectrogram(audio_bytes_)
 
 # mel-spectogram
 
