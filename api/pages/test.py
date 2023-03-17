@@ -56,7 +56,7 @@ if upload_file is not None:
         #the model
 
         def path_to_image_html(gen_sp):
-            return f'<img src="home/tcosendey/code/Tfcosendey/hungry_birds/Images/Aramides cajaneus.jpeg" width="64">'
+            return f'<img src="Images/Aramides cajaneus.jpeg" width="64">'
         def convert_df(input_df):
             return input_df.to_html(escape=False, formatters=dict(Img=path_to_image_html))
 
@@ -79,15 +79,12 @@ if upload_file is not None:
             final_score = final_score.sort_values(by = 'Probability', ascending = False).applymap(lambda x: "{:.2%}".format(x)).head(10)
             final_score['Img'] = final_score.index.map(lambda x: x)
             #final_score['Img'] = final_score['Probability'].apply(st.image(path_to_image_html))
-            print(final_score)
             html = convert_df(final_score)
             os.remove('temp_wav_file.wav')
             return html
         html = predict(audio_bytes)
 
-        st.markdown(
-            html,
-            unsafe_allow_html=True)
+        st.write(html, unsafe_allow_html=True)
 
         st.download_button(
             label="Download data as HTML",
