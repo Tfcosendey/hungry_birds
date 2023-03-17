@@ -1,38 +1,16 @@
 import streamlit as st
 import os
-from fastapi import FastAPI, UploadFile, File
-from fastapi.middleware.cors import CORSMiddleware
-from starlette.responses import Response
-import numpy as np
-import io
 import glob as glob
-import os
-import io
-from sklearn.model_selection import train_test_split
-
-from IPython import display
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-
 import pickle
-
 import tensorflow as tf
 import tensorflow_hub as hub
 import librosa
-from fastapi import FastAPI, File, UploadFile
-
-import io
-from urllib.request import urlopen
 import librosa
-import pydub
-import soundfile as sf
-import aiofiles
-import numba
-
 import numpy as np
-import pandas as pd
-import requests
+import PIL.Image
+from IPython.display import Image, HTML
 
 # layout
 st.set_page_config(
@@ -77,16 +55,15 @@ if upload_file is not None:
 
         #the model
 
-        filename = "/home/tcosendey/code/Tfcosendey/hungry_birds/Drymophila ochropyga.wav"
+        def path_to_image_html(gen_sp):
+            return f'<img src="home/tcosendey/code/Tfcosendey/hungry_birds/Images/Aramides cajaneus.jpeg" width="64">'
+        def convert_df(input_df):
+            return input_df.to_html(escape=False, formatters=dict(Img=path_to_image_html))
 
-        print(audio_bytes)
-        print(upload_file)
-
-        def predict(file: UploadFile):
-            with aiofiles.open(file.filename, 'wb') as out_file:
-                content = file.read()  # async read
-                out_file.write(content)  # async write
-            wav = load_wav_16k_mono(file.filename)
+        def predict(file):
+            with open('temp_wav_file.wav', 'wb') as wav_file:
+                wav_file.write(file)
+            wav = load_wav_16k_mono('temp_wav_file.wav')
             # yamnet model
             scores, embeddings, spectrogram = yamnet_model(wav)
             scores = scores[:,106]
@@ -96,11 +73,27 @@ if upload_file is not None:
             row_sum = tf.reduce_sum(final_scores)
             final_scores = tf.divide(final_scores, row_sum)
             final_score = pd.DataFrame(final_scores, columns = ['Probability'])
-            with open('yamnet_full/label_encoder.pkl', 'rb') as f:
-                le = pickle.load(f)
+            with open('yamnet_full/label_encoder.pkl', 'rb') as model_file:
+                le = pickle.load(model_file)
             final_score.index = le.inverse_transform(final_score.index)
-            final_score = final_score.sort_values(by = 'Probability', ascending = False).applymap(lambda x: "{:.2%}".format(x))
-            print(final_score.head(10).index)
-            os.remove(file.filename)
-            return final_score.head(10)
-    st.table(predict(upload_file))
+            final_score = final_score.sort_values(by = 'Probability', ascending = False).applymap(lambda x: "{:.2%}".format(x)).head(10)
+            final_score['Img'] = final_score.index.map(lambda x: x)
+            #final_score['Img'] = final_score['Probability'].apply(st.image(path_to_image_html))
+            print(final_score)
+            html = convert_df(final_score)
+            os.remove('temp_wav_file.wav')
+            return html
+        html = predict(audio_bytes)
+
+        st.markdown(
+            html,
+            unsafe_allow_html=True)
+
+        st.download_button(
+            label="Download data as HTML",
+            data=html,
+            file_name='output.html',
+            mime='text/html',
+ )
+#        st.image(path_to_image_html('Aramides cajaneus'))
+        # st.image(PIL.image.open('https://www.countries-ofthe-world.com/flags-normal/flag-of-United-States-of-America.png'))
