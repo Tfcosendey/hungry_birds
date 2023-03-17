@@ -55,10 +55,10 @@ if upload_file is not None:
 
         #the model
 
-        def path_to_image_html(gen_sp):
-            cwd = os.getcwd()
-            path = os.path.join(cwd,"Images/Aramides cajaneus.jpeg")
-            return f'<img src="{path}" width="64">'
+        img_dict = pd.read_csv('Images/img_df.csv',index_col='gen_sp').to_dict()['links']
+
+        def path_to_image_html(link):
+            return f'<img src="{link}" width="100" >'
         def convert_df(input_df):
             return input_df.to_html(escape=False, formatters=dict(Img=path_to_image_html))
 
@@ -79,20 +79,15 @@ if upload_file is not None:
                 le = pickle.load(model_file)
             final_score.index = le.inverse_transform(final_score.index)
             final_score = final_score.sort_values(by = 'Probability', ascending = False).applymap(lambda x: "{:.2%}".format(x)).head(10)
-            final_score['Img'] = final_score.index.map(lambda x: x)
-            #final_score['Img'] = final_score['Probability'].apply(st.image(path_to_image_html))
+            final_score['Img'] = final_score.index.map(img_dict)
             html = convert_df(final_score)
             os.remove('temp_wav_file.wav')
             return html
         html = predict(audio_bytes)
 
-        st.write(html, unsafe_allow_html=True)
 
-        st.download_button(
-            label="Download data as HTML",
-            data=html,
-            file_name='output.html',
-            mime='text/html',
- )
-#        st.image(path_to_image_html('Aramides cajaneus'))
-        # st.image(PIL.image.open('https://www.countries-ofthe-world.com/flags-normal/flag-of-United-States-of-America.png'))
+
+        st.markdown(
+            html,
+            unsafe_allow_html=True
+)
