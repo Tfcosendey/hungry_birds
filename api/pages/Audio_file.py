@@ -21,6 +21,7 @@ from scipy.io import wavfile
 from tempfile import mktemp
 import os
 import io
+from PIL import Image
 
 import numpy as np
 import pandas as pd
@@ -89,39 +90,9 @@ if audio_path is not None:
 
 
 # different
-
-aramides_1='../raw_data/songs/Aramides cajaneus/18517.mp3'
-aramides_2 = '../raw_data/songs/Aramides cajaneus/7187.mp3'
-aramides_3 = '../raw_data/songs/Aramides cajaneus/7258.mp3'
-
-atilla_1 ='../raw_data/songs/Attila rufus/1509.mp3'
-atilla_2 = '../raw_data/songs/Attila rufus/483.mp3'
-atilla_3 = '../raw_data/songs/Attila rufus/1318.mp3'
-
-automolus_1 ='../raw_data/songs/Automolus leucophthalmus/463.mp3'
-automolus_2 = '../raw_data/songs/Automolus leucophthalmus/34539.mp3'
-automolus_3 ='../raw_data/songs/Automolus leucophthalmus/80769.mp3'
-
-
-filenames = [[aramides_1,aramides_2,aramides_3],[atilla_1,atilla_2,atilla_3],[automolus_1,automolus_2,automolus_3]]
-
-titles = [["aramides_1","aramides_2","aramides_3"],["atilla_1","atilla_2","atilla_3"],["automolus_1","automolus_2","automolus_3"]]
-
-# Create 3x3 grid of subplots
-fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(10,10))
-
-# Loop through each audio file and plot spectrogram on corresponding subplot
-for i in range(3):
-    for j in range(3):
-        audio_bird = st.file_uploader(f"Upload {filenames[i][j]}", type=['mp3', 'wav'])
-        if audio_bird:
-            y, sr = librosa.load(audio_path)
-            S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
-            ax = axs[i][j]
-            img = librosa.display.specshow(librosa.power_to_db(S, ref=np.max),
-                                            y_axis='mel', fmax=8000, x_axis='time', ax=ax)
-            axs[i][j].set_title(titles[i][j])
-            fig.colorbar(img, ax=ax, format="%+2.0f dB")
-            axs[i][j].set_xlim([0, 15])
-plt.tight_layout()
-st.pyplot()
+if audio_path is not None:
+    audio_bytes = audio_path.read()
+    if st.button("Plot differences between species"):
+        image = Image.open("../hungry_birds/Images/specs.jpeg")
+        # Display image
+        st.image(image, use_column_width=True)
