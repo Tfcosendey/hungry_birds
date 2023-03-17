@@ -43,17 +43,18 @@ audio_path = st.file_uploader("Choose an audio file", type=[".wav"], accept_mult
 
 
 # Draft the audiogram etc
-if audio_path is not None:
-    audio_bytes = audio_path.read()
-    st.audio(audio_bytes,format="audio/wav")
+with audio_path as wav_file:
+    if audio_path is not None:
+        audio_bytes = audio_path.read()
+        st.audio(audio_bytes,format="audio/wav")
 
 
-y, sr = librosa.load(audio_path)
-time = librosa.times_like(y)
-fig, ax = plt.subplots(figsize=(14, 5))
+    y, sr = librosa.load(audio_path)
+    time = librosa.times_like(y)
+    fig, ax = plt.subplots(figsize=(14, 5))
 
-ax.plot(time, y)
-ax.set_xlabel('Time (seconds)')
-ax.set_ylabel('Amplitude')
-ax.set_title('Audio waveform')
-st.pyplot(fig)
+    ax.plot(time, y)
+    ax.set_xlabel('Time (seconds)')
+    ax.set_ylabel('Amplitude')
+    ax.set_title('Audio waveform')
+    st.pyplot(fig)
