@@ -56,7 +56,9 @@ if upload_file is not None:
         #the model
 
         def path_to_image_html(gen_sp):
-            return f'<img src="Images/Aramides cajaneus.jpeg" width="64">'
+            cwd = os.getcwd()
+            path = os.path.join(cwd,"Images/Aramides cajaneus.jpeg")
+            return f'<img src="{path}" width="64">'
         def convert_df(input_df):
             return input_df.to_html(escape=False, formatters=dict(Img=path_to_image_html))
 
