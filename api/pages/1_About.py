@@ -39,9 +39,9 @@ filtered_df = pd.read_csv("../hungry_birds/notebooks/filtered_df.csv")
 
 # Key figures
 st.markdown("""## Data exploration""")
-st.text("1. Number of audio recordings = 16.322")
-st.text("2. Number of different species = 121 ")
-st.text("3. Number of different features = 39 (ex: rating, length, autor, location, type of sound,...) ")
+st.text("""1. Number of audio recordings = 16.322""")
+st.text("""2. Number of different species = 121 """)
+st.text("""3. Number of different features = 39 (ex: rating, length, autor, location, type of sound,...) """)
 
 # table per year
 fig, ax = plt.subplots(figsize=(16, 6))
