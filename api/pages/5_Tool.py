@@ -58,7 +58,7 @@ if upload_file is not None:
         img_dict = pd.read_csv('Images/img_df.csv',index_col='gen_sp').to_dict()['links']
 
         def path_to_image_html(link):
-            return f'<img src="{link}" width="100" >'
+            return f'<img src="{link}" width="100" height="100" >'
         def convert_df(input_df):
             return input_df.to_html(escape=False, formatters=dict(Img=path_to_image_html))
 
@@ -82,7 +82,19 @@ if upload_file is not None:
             final_score['Img'] = final_score.index.map(img_dict)
             html = convert_df(final_score)
             os.remove('temp_wav_file.wav')
+            # Splitting the table into two side-by-side tables
+            table_left = final_score.iloc[:5]
+            table_right = final_score.iloc[5:]
+
+            # Centering the tables
+            table_left_html = f"<div style='text-align:center; display:inline-block;'>{convert_df(table_left)}</div>"
+            table_right_html = f"<div style='text-align:center; display:inline-block;'>{convert_df(table_right)}</div>"
+
+            # Combining the tables
+            html = f"<div style='text-align:center;'>{table_left_html}{table_right_html}</div>"
+
             return html
+
         html = predict(audio_bytes)
 
 
