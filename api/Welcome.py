@@ -20,7 +20,7 @@ st.markdown("""## To Hungry Birds classification tool""")
 st.markdown("""- In the World, :red[1 out of 8] bird species are under threat of extinction.""")
 st.markdown("""- Brazil is the :red[2nd country] in the world in number of globally threatened birds""")
 
-image = Image.open("Images/Image 20-03-23 à 15.08.jpg")
+image = Image.open("../hungry_birds/Images/Image 20-03-23 à 15.08.jpg")
 
 st.image(image, width=500)
 
