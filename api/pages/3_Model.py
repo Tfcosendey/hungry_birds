@@ -87,60 +87,21 @@ if upload_file is not None:
         spectrogram_np = spectrogram.numpy()
 
         # Define the figure object.
-        fig = plt.figure(figsize=(8, 10))
+        fig = plt.figure(figsize=(8, 5))
 
         # Plot the waveform.
-        plt.subplot(4, 1, 1)
+        plt.subplot(2, 1, 1)
         plt.plot(wav)
         plt.xlim([0, len(wav)])
         plt.title('Input Wave')
         # Plot the log-mel spectrogram (returned by the model).
-        plt.subplot(4, 1, 2)
+        plt.subplot(2, 1, 2)
         plt.imshow(spectrogram_np.T, aspect='auto', interpolation='nearest', origin='lower')
         plt.title('Mel Spectogram')
-
-        # Plot and label the model output scores for the top-scoring classes.
-        mean_scores = np.mean(scores, axis=0)
-        top_n = 10
-        top_class_indices = np.argsort(mean_scores)[::-1][:top_n]
-        plt.subplot(4, 1, 3)
-        plt.imshow(scores_np[:, top_class_indices].T, aspect='auto', interpolation='nearest', cmap='gray_r')
-        plt.title('Yamnet Model Results')
-
-        # patch_padding = (PATCH_WINDOW_SECONDS / 2) / PATCH_HOP_SECONDS
-        # values from the model documentation
-        patch_padding = (0.025 / 2) / 0.01
-        plt.xlim([-patch_padding-0.5, scores.shape[0] + patch_padding-0.5])
-        # Label the top_N classes.
-        yticks = range(0, top_n, 1)
-        plt.yticks(yticks, [class_names[top_class_indices[x]] for x in yticks])
-        _ = plt.ylim(-0.5 + np.array([top_n, 0]))
-
-        final_scores_np, final_scores_index = predict_score(audio_bytes)
-
-        plt.subplot(4, 1, 4)
-        # Plot and label the model output scores for the top-scoring classes.
-        mean_scores = np.mean(final_scores_np, axis=0)
-        top_n = 10
-        top_class_indices = np.argsort(mean_scores)[::-1][:top_n]
-        plt.imshow(final_scores_np[:, top_class_indices].T, aspect='auto', interpolation='nearest', cmap='gray_r')
-        plt.title('Hungry Birds Model Results')
-
-        #patch_padding = (PATCH_WINDOW_SECONDS / 2) / PATCH_HOP_SECONDS
-        #values from the model documentation
-        patch_padding = (0.025 / 2) / 0.01
-        plt.xlim([-patch_padding-0.5, scores.shape[0] + patch_padding-0.5])
-        #Label the top_N classes.
-        yticks = range(0, top_n, 1)
-        plt.yticks(yticks, [final_scores_index[x] for x in yticks])
-        _ = plt.ylim(-0.5 + np.array([top_n, 0]))
-            # Display the figure using Streamlit.
-        plt.subplots_adjust(hspace=0.5)
+        plt.tight_layout()
         st.pyplot(fig)
 
-        st.markdown("""### The final model archieved a top-10-accuracy of **55%**, although it can definitely be improved it is already **6.7x** better than a dummy model (8.2%).""")
-        st.markdown("""### Here are some potential solutions for model improvement:""")
-        st.markdown("""#### - Refine the data cleanning and noise reduction""")
-        st.markdown("""#### - Improve Dataset inbalance (same lenght across species)""")
-        st.markdown("""#### - Use source separation during predict (BirdMixit)""")
-        st.markdown("""#### - Unfreeze the layers from Yamnet to specialize it with our Dataset **(time consuming)**""")
+
+        image = Image.open('../hungry_birds/Images/specs.jpeg')
+        # Display image
+        st.image(image, use_column_width=True)

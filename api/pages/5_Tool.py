@@ -97,9 +97,8 @@ if upload_file is not None:
 
         html = predict(audio_bytes)
 
-
-
         st.markdown(
             html,
             unsafe_allow_html=True
 )
+        st.markdown("""### The final model archieved a top-10-accuracy of **55%**, although it can definitely be improved it is already **6.7x** better than a dummy model (8.2%).""")
