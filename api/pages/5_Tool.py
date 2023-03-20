@@ -83,8 +83,8 @@ if upload_file is not None:
             html = convert_df(final_score)
             os.remove('temp_wav_file.wav')
             # Splitting the table into two side-by-side tables
-            table_left = final_score.iloc[:5]
-            table_right = final_score.iloc[5:]
+            table_left = final_score.iloc[::2]
+            table_right = final_score.iloc[1::2]
 
             # Centering the tables
             table_left_html = f"<div style='text-align:center; display:inline-block;'>{convert_df(table_left)}</div>"
