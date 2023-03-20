@@ -58,7 +58,7 @@ if upload_file is not None:
         img_dict = pd.read_csv('Images/img_df.csv',index_col='gen_sp').to_dict()['links']
 
         def path_to_image_html(link):
-            return f'<img src="{link}" width="150" height="150" >'
+            return f'<img src="{link}" width="120" height="120" >'
         def convert_df(input_df):
             return input_df.to_html(escape=False, formatters=dict(Img=path_to_image_html))
 
