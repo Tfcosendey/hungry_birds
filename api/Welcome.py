@@ -12,3 +12,6 @@ st.set_page_config(
     page_icon="🦤",
     layout="wide",
     initial_sidebar_state="expanded")
+
+st.markdown("""# Welcome!""")
+st.markdown("""## To Hungry Birds classification tool""")
