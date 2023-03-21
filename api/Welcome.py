@@ -26,4 +26,4 @@ st.image(image, width=500)
 
 st.markdown("""Researchers use population monitoring to understand how birds react to changes in the environment and conservation efforts. But many bird species across the world are isolated in difficult-to-access habitats. With physical monitoring difficult, sound recording is a solution to sicentists. Known as bioacoustic monitoring, this approach could provide a :green[passive, low labor, and cost-effective] strategy for studying endangered bird populations""")
 
-st.markdown(""":green[Group members]: Valentina, Thales, Rodolphe""")
+st.markdown(""" :green[Group members]: Valentina Spohr, Thales Cosendey, Rodolphe Terlinden """)

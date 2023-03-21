@@ -105,3 +105,4 @@ if upload_file is not None:
         image = Image.open('../hungry_birds/Images/specs.jpeg')
         # Display image
         st.image(image, use_column_width=True)
+        st.markdown("""### The final model archieved a top-10-accuracy of **55%**, although it can definitely be improved it is already **6.7x** better than a dummy model (8.2%).""")
