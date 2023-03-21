@@ -20,7 +20,7 @@ st.set_page_config(
     initial_sidebar_state="expanded")
 
 st.markdown("""# Hungry Birds Prediction Tool
-## Which bird specy is singing in your garden?""")
+## Which bird species are singing in your garden?""")
 
 upload_file = st.file_uploader("Choose an audio file", type=[".wav"], accept_multiple_files=False)
 
